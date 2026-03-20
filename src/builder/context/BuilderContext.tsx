@@ -6,9 +6,14 @@ interface BuilderContextType {
   updateConfig: (updates: Partial<PortfolioConfig>) => void
   updateAbout: (updates: Partial<PortfolioConfig['about']>) => void
   updateSocial: (updates: Partial<PortfolioConfig['social']>) => void
+  addExperience: (experience: PortfolioConfig['experience'][0]) => void
+  removeExperience: (index: number) => void
+  updateExperience: (index: number, experience: Partial<PortfolioConfig['experience'][0]>) => void
   addProject: (project: PortfolioConfig['projects'][0]) => void
   removeProject: (index: number) => void
   updateProject: (index: number, project: Partial<PortfolioConfig['projects'][0]>) => void
+  addSkillCategory: (title: string) => void
+  removeSkillCategory: (index: number) => void
   addSkill: (categoryIndex: number, skill: string) => void
   removeSkill: (categoryIndex: number, skillIndex: number) => void
   addStat: (stat: PortfolioConfig['about']['stats'][0]) => void
@@ -30,6 +35,24 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
 
   const updateSocial = (updates: Partial<PortfolioConfig['social']>) => {
     setConfig(prev => ({ ...prev, social: { ...prev.social, ...updates } }))
+  }
+
+  const addExperience = (experience: PortfolioConfig['experience'][0]) => {
+    setConfig(prev => ({ ...prev, experience: [...prev.experience, experience] }))
+  }
+
+  const removeExperience = (index: number) => {
+    setConfig(prev => ({ 
+      ...prev, 
+      experience: prev.experience.filter((_, i) => i !== index) 
+    }))
+  }
+
+  const updateExperience = (index: number, experience: Partial<PortfolioConfig['experience'][0]>) => {
+    setConfig(prev => ({
+      ...prev,
+      experience: prev.experience.map((exp, i) => i === index ? { ...exp, ...experience } : exp)
+    }))
   }
 
   const addProject = (project: PortfolioConfig['projects'][0]) => {
@@ -68,6 +91,20 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     }))
   }
 
+  const addSkillCategory = (title: string) => {
+    setConfig(prev => ({
+      ...prev,
+      skills: [...prev.skills, { title, skills: [] }]
+    }))
+  }
+
+  const removeSkillCategory = (index: number) => {
+    setConfig(prev => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index)
+    }))
+  }
+
   const addStat = (stat: PortfolioConfig['about']['stats'][0]) => {
     setConfig(prev => ({
       ...prev,
@@ -88,9 +125,14 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
       updateConfig,
       updateAbout,
       updateSocial,
+      addExperience,
+      removeExperience,
+      updateExperience,
       addProject,
       removeProject,
       updateProject,
+      addSkillCategory,
+      removeSkillCategory,
       addSkill,
       removeSkill,
       addStat,

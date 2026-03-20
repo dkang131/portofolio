@@ -23,6 +23,15 @@ export interface Project {
   isPaper?: boolean
 }
 
+export interface WorkExperience {
+  company: string
+  position: string
+  location: string
+  startDate: string
+  endDate: string
+  description: string
+}
+
 export interface PortfolioConfig {
   name: string
   title: string
@@ -32,6 +41,7 @@ export interface PortfolioConfig {
     description: string
     stats: Stat[]
   }
+  experience: WorkExperience[]
   skills: SkillCategory[]
   projects: Project[]
 }
@@ -52,6 +62,16 @@ export const defaultConfig: PortfolioConfig = {
       { number: '20+', label: 'Projects Completed' }
     ]
   },
+  experience: [
+    {
+      company: 'Company Name',
+      position: 'Job Title',
+      location: 'City, Country',
+      startDate: '2022',
+      endDate: 'Present',
+      description: 'Describe your responsibilities and achievements...'
+    }
+  ],
   skills: [
     {
       title: 'Frontend',

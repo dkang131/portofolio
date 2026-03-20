@@ -1,5 +1,6 @@
 import type { PortfolioConfig } from '../types/portfolio'
 import JSZip from 'jszip'
+import html2pdf from 'html2pdf.js'
 
 export function generatePortfolioFiles(config: PortfolioConfig) {
   const files: Record<string, string> = {}
@@ -424,5 +425,407 @@ export async function deployToGitHub(config: PortfolioConfig, token: string, rep
   return {
     repoUrl: repo.html_url,
     pagesUrl: `https://${username}.github.io/${repoName}`
+  }
+}
+
+// Generate PDF from portfolio configuration
+export function generatePortfolioPDF(config: PortfolioConfig): string {
+  const currentYear = new Date().getFullYear()
+  
+  // Build skills HTML - Tabular Card Layout
+  const skillCols = config.skills.length === 4 ? 2 : 3
+  const skillsHTML = config.skills.map(category => `
+    <div class="skill-card">
+      <h3>${category.title}</h3>
+      <ul class="skill-list">
+        ${category.skills.map(skill => `<li class="skill-item"><span class="skill-dot"></span>${skill}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('')
+
+  // Build experience HTML
+  const experienceHTML = config.experience.map(exp => `
+    <div class="experience-item">
+      <div class="experience-header">
+        <h3>${exp.position}</h3>
+        <span class="experience-date">${exp.startDate} - ${exp.endDate}</span>
+      </div>
+      <p class="experience-company">${exp.company} | ${exp.location}</p>
+      <p class="experience-desc">${exp.description}</p>
+    </div>
+  `).join('')
+
+  // Build projects HTML
+  const projectsHTML = config.projects.map(project => `
+    <div class="project-item">
+      <h3>${project.title}</h3>
+      <p>${project.description}</p>
+      <div class="project-tags">
+        ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+      </div>
+      ${project.github ? `<p class="project-link">Code: ${project.github}</p>` : ''}
+      ${project.demo ? `<p class="project-link">${project.isPaper ? 'Paper' : 'Demo'}: ${project.demo}</p>` : ''}
+    </div>
+  `).join('')
+
+  // Build stats HTML
+  const statsHTML = config.about.stats.map(stat => `
+    <div class="stat-box">
+      <div class="stat-number">${stat.number}</div>
+      <div class="stat-label">${stat.label}</div>
+    </div>
+  `).join('')
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page { 
+      margin: 0; 
+      size: A4;
+    }
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background: white;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 8mm 12mm;
+      margin: 0;
+      background: white;
+    }
+    /* Header Section */
+    .header {
+      text-align: center;
+      padding-bottom: 3px;
+      border-bottom: 2px solid #6366f1;
+      margin-bottom: 2px;
+    }
+    .header h1 {
+      font-size: 28px;
+      margin: 0 0 4px 0;
+      color: #1f2937;
+      font-weight: 700;
+    }
+    .header .title {
+      font-size: 16px;
+      color: #6366f1;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .header .location {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      font-size: 11px;
+    }
+    .contact-info a {
+      color: #4b5563;
+      text-decoration: none;
+    }
+    /* Section Styling */
+    .section {
+      margin-bottom: 0;
+      padding-bottom: 2px;
+    }
+    .section-title {
+      font-size: 16px;
+      color: #1f2937;
+      margin-bottom: 1px;
+      padding-bottom: 1px;
+      border-bottom: 1px solid #e5e7eb;
+      font-weight: 600;
+    }
+    /* About Section */
+    .about-text {
+      font-size: 13px;
+      color: #4b5563;
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+    .stats-container {
+      display: flex;
+      gap: 4px;
+      justify-content: flex-start;
+    }
+    .stat-box {
+      text-align: center;
+      padding: 3px 8px;
+      background: #f3f4f6;
+      border-radius: 4px;
+    }
+    .stat-number {
+      font-size: 18px;
+      font-weight: 700;
+      color: #6366f1;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    /* Skills Section - Tabular Card Layout */
+    .skills-grid {
+      display: grid;
+      gap: 4px;
+    }
+    .skills-grid.cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .skills-grid.cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .skill-card {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 8px;
+      border: 1px solid #e5e7eb;
+    }
+    .skill-card h3 {
+      font-size: 13px;
+      color: #1f2937;
+      margin: 0 0 4px 0;
+      font-weight: 600;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .skill-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 0;
+      color: #4b5563;
+      font-size: 12px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .skill-item:last-child {
+      border-bottom: none;
+    }
+    .skill-dot {
+      width: 6px;
+      height: 6px;
+      background: #6366f1;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    /* Projects Section */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+    .project-item {
+      margin-bottom: 0;
+      padding: 5px;
+      border: 1px solid #e5e7eb;
+      border-radius: 3px;
+      background: #fafafa;
+    }
+    .project-item h3 {
+      font-size: 14px;
+      color: #1f2937;
+      margin: 0 0 6px 0;
+      font-weight: 600;
+    }
+    .project-item p {
+      font-size: 11px;
+      color: #4b5563;
+      margin: 0 0 5px 0;
+      line-height: 1.3;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-bottom: 4px;
+    }
+    .tag {
+      background: #e5e7eb;
+      color: #4b5563;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+    }
+    .project-link {
+      font-size: 10px;
+      color: #6366f1;
+      margin: 1px 0;
+      word-break: break-all;
+    }
+    /* Experience Section */
+    .experience-item {
+      margin-bottom: 4px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .experience-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .experience-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .experience-header h3 {
+      font-size: 15px;
+      color: #1f2937;
+      margin: 0;
+      font-weight: 600;
+    }
+    .experience-date {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .experience-company {
+      font-size: 12px;
+      color: #6366f1;
+      margin: 0 0 4px 0;
+      font-weight: 500;
+    }
+    .experience-desc {
+      font-size: 12px;
+      color: #4b5563;
+      margin: 0;
+      line-height: 1.35;
+    }
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 4px;
+      padding-top: 3px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 8px;
+      color: #9ca3af;
+      background: transparent;
+    }
+    .footer p {
+      margin: 0;
+      background: transparent;
+      line-height: 1.2;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="header">
+      <h1>${config.name}</h1>
+      <div class="title">${config.title}</div>
+      <div class="location">${config.location}</div>
+      <div class="contact-info">
+        <a href="mailto:${config.social.email}">${config.social.email}</a>
+        <a href="${config.social.linkedin}">LinkedIn</a>
+        <a href="${config.social.github}">GitHub</a>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="section">
+      <h2 class="section-title">About Me</h2>
+      <p class="about-text">${config.about.description}</p>
+      <div class="stats-container">
+        ${statsHTML}
+      </div>
+    </div>
+
+    <!-- Experience Section -->
+    <div class="section">
+      <h2 class="section-title">Work Experience</h2>
+      ${experienceHTML}
+    </div>
+
+    <!-- Skills Section -->
+    <div class="section">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid cols-${skillCols}">
+        ${skillsHTML}
+      </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="section">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+        ${projectsHTML}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>&copy; ${currentYear} ${config.name}. All rights reserved.</p>
+      <p>Generated with Portfolio Builder</p>
+    </div>
+  </div>
+</body>
+</html>
+  `
+  
+  return htmlContent
+}
+
+// Download portfolio as PDF
+export async function downloadAsPDF(config: PortfolioConfig, filename: string) {
+  const htmlContent = generatePortfolioPDF(config)
+  
+  // Create a temporary container
+  const container = document.createElement('div')
+  container.innerHTML = htmlContent
+  container.style.position = 'absolute'
+  container.style.left = '-9999px'
+  container.style.top = '0'
+  document.body.appendChild(container)
+  
+  // Wait for styles to apply
+  await new Promise(resolve => setTimeout(resolve, 100))
+  
+  const element = container.querySelector('.page') as HTMLElement
+  
+  const options = {
+    margin: 0,
+    filename: `${filename}.pdf`,
+    image: { type: 'jpeg' as const, quality: 0.98 },
+    html2canvas: { 
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#ffffff'
+    },
+    jsPDF: { 
+      unit: 'mm' as const, 
+      format: [210, Math.max(297, element.scrollHeight / 3.78)] as [number, number], 
+      orientation: 'portrait' as const
+    }
+  }
+  
+  try {
+    await html2pdf().set(options).from(element).save()
+  } finally {
+    document.body.removeChild(container)
   }
 }

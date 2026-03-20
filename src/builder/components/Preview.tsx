@@ -41,6 +41,23 @@ export default function Preview() {
           </div>
         </section>
 
+        {/* Experience Preview */}
+        <section className="preview-section">
+          <h2>Experience</h2>
+          <div className="preview-experience-list">
+            {config.experience.map((exp, i) => (
+              <div key={i} className="preview-experience-item">
+                <div className="preview-experience-header">
+                  <h4>{exp.position}</h4>
+                  <span className="preview-experience-date">{exp.startDate} - {exp.endDate}</span>
+                </div>
+                <p className="preview-experience-company">{exp.company} | {exp.location}</p>
+                <p className="preview-experience-desc">{exp.description.slice(0, 100)}...</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Skills Preview */}
         <section className="preview-section preview-skills">
           <h2>Skills</h2>
@@ -49,7 +66,7 @@ export default function Preview() {
               <div key={i} className="preview-skill-card">
                 <h4>{category.title}</h4>
                 <ul>
-                  {category.skills.slice(0, 4).map((skill, j) => (
+                  {category.skills.map((skill, j) => (
                     <li key={j}>{skill}</li>
                   ))}
                 </ul>
@@ -62,7 +79,7 @@ export default function Preview() {
         <section className="preview-section">
           <h2>Projects</h2>
           <div className="preview-projects-grid">
-            {config.projects.slice(0, 2).map((project, i) => (
+            {config.projects.map((project, i) => (
               <div key={i} className="preview-project-card">
                 <h4>{project.title}</h4>
                 <p>{project.description.slice(0, 80)}...</p>

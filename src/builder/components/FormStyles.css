@@ -255,3 +255,314 @@
 .btn-primary:hover {
   background: var(--accent-hover);
 }
+
+/* Skills Form */
+.skill-category-form {
+  margin-bottom: 1rem;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.category-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-h);
+}
+
+.btn-remove-category {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-remove-category:hover {
+  background: #fee2e2;
+}
+
+.skills-list-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 0.85rem;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.btn-remove-skill {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.btn-remove-skill:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.add-skill-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.category-select {
+  padding: 0.625rem 0.875rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-skill-form input {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.add-skill-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Add Category Form */
+.add-category-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 2px dashed var(--border);
+}
+
+.add-category-form input {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.add-category-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Experience Form */
+.experience-card-form {
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.experience-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.experience-input-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-h);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.25rem 0;
+  width: 100%;
+}
+
+.experience-input-title:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.experience-input-company {
+  font-size: 0.95rem;
+  color: var(--accent);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.25rem 0;
+  width: 100%;
+}
+
+.experience-input-company:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.experience-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.experience-input-meta {
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.375rem 0.625rem;
+  min-width: 150px;
+}
+
+.experience-dates {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.experience-dates span {
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+.experience-input-date {
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.375rem 0.625rem;
+  width: 100px;
+}
+
+.experience-textarea {
+  width: 100%;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.experience-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-experience-form {
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 2px dashed var(--border);
+}
+
+.add-experience-form h4 {
+  margin-bottom: 1rem;
+  color: var(--text-h);
+}
+
+.add-experience-form input,
+.add-experience-form textarea {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.add-experience-form input:focus,
+.add-experience-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.experience-dates-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.experience-dates-row input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-cancel {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--bg);
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

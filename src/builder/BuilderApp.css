@@ -33,13 +33,23 @@
 }
 
 .btn-download,
-.btn-deploy {
+.btn-deploy,
+.btn-pdf {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.btn-pdf {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-pdf:hover:not(:disabled) {
+  background: #b91c1c;
 }
 
 .btn-download {
@@ -63,7 +73,8 @@
 }
 
 .btn-download:disabled,
-.btn-deploy:disabled {
+.btn-deploy:disabled,
+.btn-pdf:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
