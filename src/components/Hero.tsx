@@ -1,5 +1,5 @@
 import './Hero.css'
-// import profileImg from '../assets/profileImg.jpg'
+import profileImg from '../assets/profileImg.jpg'
 
 function Hero() {
   return (
@@ -43,11 +43,11 @@ function Hero() {
             <div className="hero-avatar">
               <span>YN</span>
             </div>
-            {/* <img 
+            <img 
               src={profileImg} 
               alt="darrenkang" 
               className="hero-avatar-img"
-            /> */}
+            />
           </div>
         </div>
       </div>
