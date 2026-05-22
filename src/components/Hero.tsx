@@ -1,7 +1,11 @@
 import './Hero.css'
 import profileImg from '../assets/profileImg.jpg'
+import { useState } from 'react'
 
 function Hero() {
+  const [imgError, setImgError] = useState(false)
+  const showFallback = !profileImg || imgError
+
   return (
     <section id="home" className="hero-section">
       <div className="container">
@@ -40,14 +44,19 @@ function Hero() {
             </div>
           </div>
           <div className="hero-image">
-            <div className="hero-avatar">
-              <span>YN</span>
-            </div>
-            <img 
-              src={profileImg} 
-              alt="darrenkang" 
-              className="hero-avatar-img"
-            />
+            {showFallback ? (
+              // Fallback avatar
+              <div className="hero-avatar">
+                <span>YN</span>
+              </div>
+            ) : (
+              <img 
+                src={profileImg} 
+                alt="Darren Kang's profile" 
+                className="hero-avatar-img"
+                onError={() => setImgError(true)}
+              />
+            )}
           </div>
         </div>
       </div>
