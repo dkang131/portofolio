@@ -28,6 +28,7 @@
   height: 280px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center 10%;
   box-shadow: var(--shadow-lg);
   flex-shrink: 0;
 }
